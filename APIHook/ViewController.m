@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AppClient.h"
 
 @interface ViewController ()
 
@@ -17,13 +18,37 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
+
+
+- (IBAction)getServerStuffAction:(id)sender
+{
+    // GET /server_stuff
+    [[AppClient sharedClient] getServerStuff:
+     ^(NSArray *response) {
+         NSLog(@"SERVER GET RESPONSE: %@", response);
+     } failure:^(NSError *error) {
+         NSLog(@"SERVER GET FAIL: %@", error.localizedDescription);
+     }];
+
+}
+
+- (IBAction)postServerStuffAction:(id)sender
+{
+    // POST /server_stuff
+    [[AppClient sharedClient] postStuffToServer:@"hello server"
+                                        success:
+     ^(NSDictionary *responseDict) {
+         NSLog(@"SERVER POST SUCCESS: %@", responseDict);
+     } failure:^(NSError *error) {
+         NSLog(@"SERVER POST FAIL: %@", error.localizedDescription);
+     }];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
